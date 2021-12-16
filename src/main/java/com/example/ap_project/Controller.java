@@ -9,6 +9,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
+import java.util.HashMap;
+
 public class Controller {
 
     private double x;
@@ -34,16 +36,24 @@ public class Controller {
     private double boardWidth;
     private double boardHeight;
     private double boxHeight;
-    private double currentPlayer1 = 0;
-    private double currentPlayer2 = 0;
+    private int currentPlayer1 = 0;
+    private int currentPlayer2 = 0;
 
     private boolean lr = true; //true means right
 
+    private HashMap<Integer, Integer> snakes = new HashMap<>();
+    private HashMap<Integer, Integer> ladder = new HashMap<>();
 
+    private double cell_1_X;
+    private double cell_1_Y;
 
-
+    private int[][] cellCoordinates = new int[10][10];
 
     public void roll(ActionEvent e) throws InterruptedException {
+        populateSnakesAndLadders();
+        System.out.println("x ki value initially is"+ x);
+        System.out.println("x ki value initially is"+ y);
+
         findDimensions();
 
         int rn = (int)(Math.random() * 6.0D) + 1;
@@ -76,13 +86,18 @@ public class Controller {
             currentPlayer1++;
             return;
         }
+
+        //if ladder is encountered
+        if(ladder.containsKey(currentPlayer1)){
+
+        }
+
         TranslateTransition trans = new TranslateTransition();
         trans.setNode(Player1);
-        trans.setDuration(Duration.millis(500));
+        trans.setDuration(Duration.millis(1000));
 
         if ( currentPlayer1 % 10 == 0 ){
             trans.setToY(this.y-boxHeight);
-
             this.y = this.y-boxHeight;
             //Player1.setCenterY(this.y -= boxHeight);
             lr = !lr;
@@ -102,6 +117,31 @@ public class Controller {
         trans.play();
         currentPlayer1++;
     }
+
+    public void populateSnakesAndLadders(){
+        snakes.put(43,17);
+        snakes.put(50,5);
+        snakes.put(56,8);
+        snakes.put(73,15);
+        snakes.put(84,58);
+        snakes.put(98,40);
+
+        ladder.put(2,23);
+        ladder.put(6,45);
+        ladder.put(20,59);
+        ladder.put(52,72);
+        ladder.put(57,96);
+        ladder.put(71,92);
+
+    }
+//    public void findPath(int start,int end){
+//        int vertical;
+//        int r1 = start / 10;
+//        int r2 = end / 10;
+//
+//        vertical = r1>r2 ? r1-r2 : r2-r1;
+//        System.out.println("ladder encountered, row distance is "+vertical);
+//    }
 
 
 }

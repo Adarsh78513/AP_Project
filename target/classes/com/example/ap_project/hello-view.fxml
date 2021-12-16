@@ -7,17 +7,16 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Circle?>
 
-
 <AnchorPane fx:id="Pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="888.0" prefWidth="1048.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ap_project.Controller">
    <children>
-      <ImageView fx:id="board" fitHeight="807.0" fitWidth="1160.0" layoutX="121.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="32.0" AnchorPane.leftAnchor="121.0" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="32.0">
+      <ImageView fx:id="board" fitHeight="807.0" fitWidth="1160.0" layoutX="166.0" layoutY="51.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="166.0" AnchorPane.rightAnchor="75.0" AnchorPane.topAnchor="51.0">
          <image>
             <Image url="@../../../istockphoto-577332576-612x612.jpg" />
          </image>
       </ImageView>
-      <Circle fx:id="Player1" layoutX="159.0" layoutY="802.0" radius="25.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="Player2" fill="WHITE" layoutX="78.0" layoutY="661.0" radius="29.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="Player1" layoutX="205.0" layoutY="820.0" radius="25.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="Player2" fill="WHITE" layoutX="95.0" layoutY="775.0" radius="25.0" stroke="BLACK" strokeType="INSIDE" />
       <Label fx:id="Number" layoutX="450.0" layoutY="858.0" text="Label" />
-      <Button fx:id="Dice" layoutX="518.0" layoutY="845.0" mnemonicParsing="false" onAction="#roll" text="Dice" />
+      <Button fx:id="Dice" layoutX="518.0" layoutY="854.0" mnemonicParsing="false" onAction="#roll" text="Dice" />
    </children>
 </AnchorPane>
