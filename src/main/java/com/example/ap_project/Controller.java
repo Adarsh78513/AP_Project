@@ -1,11 +1,13 @@
 package com.example.ap_project;
 
+import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
+import javafx.util.Duration;
 
 public class Controller {
 
@@ -32,10 +34,10 @@ public class Controller {
     private double boardWidth;
     private double boardHeight;
     private double boxHeight;
-    private double currentPlayer1 = 1;
-    private double currentPlayer2 = 1;
-    //true means right
-    private boolean lr = true;
+    private double currentPlayer1 = 0;
+    private double currentPlayer2 = 0;
+
+    private boolean lr = true; //true means right
 
 
 
@@ -46,6 +48,13 @@ public class Controller {
 
         int rn = (int)(Math.random() * 6.0D) + 1;
         Number.setText(String.valueOf(rn));
+        if(currentPlayer1+rn>100 || (currentPlayer1==0 && rn!=6)){
+            return;
+        }
+        if(currentPlayer1==0){
+            move();
+            return;
+        }
 //        System.out.println(rn);
         for ( int i = 0 ; i < rn ; i++){
             move();
@@ -63,18 +72,34 @@ public class Controller {
     }
 
     public void move() throws InterruptedException {
+        if(currentPlayer1==0){
+            currentPlayer1++;
+            return;
+        }
+        TranslateTransition trans = new TranslateTransition();
+        trans.setNode(Player1);
+        trans.setDuration(Duration.millis(500));
+
         if ( currentPlayer1 % 10 == 0 ){
-            Player1.setCenterY(this.y -= boxHeight);
+            trans.setToY(this.y-boxHeight);
+
+            this.y = this.y-boxHeight;
+            //Player1.setCenterY(this.y -= boxHeight);
             lr = !lr;
         }
         else{
             if (!lr){
-                Player1.setCenterX(this.x -= boxHeight);
+                trans.setToX(this.x-boxHeight);
+                this.x = this.x-boxHeight;
+               // Player1.setCenterX(this.x -= boxHeight);
             }
             else{
-                Player1.setCenterX(this.x += boxHeight);
+                trans.setToX(this.x+boxHeight);
+                this.x = this.x+boxHeight;
+                //Player1.setCenterX(this.x += boxHeight);
             }
         }
+        trans.play();
         currentPlayer1++;
     }
 
