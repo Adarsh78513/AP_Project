@@ -1,11 +1,11 @@
 package com.example.ap_project;
 
 public class pair {
-    int vertical;
-    int horizontal;
+    double x_cor;
+    double y_cor;
 
-    pair(int v,int h){
-        this.vertical = v;
-        this.horizontal = h;
+    pair(double v,double h){
+        this.x_cor = v;
+        this.y_cor = h;
     }
 }

@@ -51,9 +51,6 @@ public class Controller {
 
     public void roll(ActionEvent e) throws InterruptedException {
         populateSnakesAndLadders();
-        System.out.println("x ki value initially is"+ x);
-        System.out.println("x ki value initially is"+ y);
-
         findDimensions();
 
         int rn = (int)(Math.random() * 6.0D) + 1;
@@ -69,6 +66,13 @@ public class Controller {
         for ( int i = 0 ; i < rn ; i++){
             move();
         }
+//        //if ladder is encountered
+//        if(ladder.containsKey(currentPlayer1)){
+//            System.out.println("fuckkkk! a ladder");
+//            pair currposition = getCellcoordinates(currentPlayer1);
+//            pair ladderends = getCellcoordinates(ladder.get(currentPlayer1));
+//            translateBtwpoints(currposition,ladderends);
+//        }
 //        Player1.setCenterX(this.x += (double)(boxHeight * rn));
 
     }
@@ -77,8 +81,8 @@ public class Controller {
         boardWidth = board.getLayoutBounds().getWidth();
         boardHeight = board.getLayoutBounds().getHeight();
         boxHeight = boardHeight / 10.0;
-        System.out.println(boardWidth);
-        System.out.println(boardHeight);
+//        System.out.println(boardWidth);
+//        System.out.println(boardHeight);
     }
 
     public void move() throws InterruptedException {
@@ -87,10 +91,7 @@ public class Controller {
             return;
         }
 
-        //if ladder is encountered
-        if(ladder.containsKey(currentPlayer1)){
 
-        }
 
         TranslateTransition trans = new TranslateTransition();
         trans.setNode(Player1);
@@ -134,13 +135,64 @@ public class Controller {
         ladder.put(71,92);
 
     }
-//    public void findPath(int start,int end){
-//        int vertical;
-//        int r1 = start / 10;
-//        int r2 = end / 10;
-//
-//        vertical = r1>r2 ? r1-r2 : r2-r1;
-//        System.out.println("ladder encountered, row distance is "+vertical);
+
+    public void test(ActionEvent e){
+        TranslateTransition trans = new TranslateTransition();
+        trans.setNode(Player2);
+        trans.setByX(board.getLayoutX());
+//        System.out.println(board.getLayoutX());
+//        System.out.println(board.getLayoutY());
+        trans.setByY(board.getLayoutY());
+        trans.setDuration(Duration.millis(1000));
+        trans.play();
+    }
+
+    public pair getCellcoordinates(int cellNo){ //will give coordinates of a cell, w.r.t pane
+        int row,col;
+        double boardLayoutX = board.getLayoutX();
+        double boardLayoutY = board.getLayoutY();
+        double bottomleftX = boardLayoutX + boxHeight/2;
+        double bottomleftY = boardLayoutY + boardHeight - boxHeight/2;
+
+        if(cellNo % 10 !=0){
+            //not last cell
+            if((cellNo / 10)%2==0){
+                //left to right
+                row = cellNo/10;
+                col = cellNo%10;
+            }
+            else{
+                //right to left
+                row = cellNo/10;
+                col = 10 - cellNo%10;
+            }
+        }
+
+        else{
+            //is last cell
+            if((cellNo / 10)%2 != 0){
+                //left to right
+                row = cellNo/10 - 1;
+                col = 10;
+            }
+            else{
+                //right to left
+                row = cellNo/10 -1;
+                col = 0;
+            }
+        }
+        double x1 = bottomleftX + (col-1)*boxHeight;
+        double y1 = bottomleftY - row * boxHeight;
+        pair toRet = new pair(x1,y1);
+
+        return  toRet;
+
+    }
+
+//    public void translateBtwpoints(pair a,pair b){
+//        Player1.setLayoutX(b.x_cor);
+//        Player1.setLayoutY(b.y_cor);
+//        System.out.println("climbed");
 //    }
 
 

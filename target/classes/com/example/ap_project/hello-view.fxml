@@ -15,8 +15,9 @@
          </image>
       </ImageView>
       <Circle fx:id="Player1" layoutX="205.0" layoutY="820.0" radius="25.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="Player2" fill="WHITE" layoutX="95.0" layoutY="775.0" radius="25.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="Player2" fill="WHITE" layoutX="92.0" layoutY="618.0" radius="25.0" stroke="BLACK" strokeType="INSIDE" />
       <Label fx:id="Number" layoutX="450.0" layoutY="858.0" text="Label" />
       <Button fx:id="Dice" layoutX="518.0" layoutY="854.0" mnemonicParsing="false" onAction="#roll" text="Dice" />
+      <Button fx:id="button2" layoutX="41.0" layoutY="455.0" mnemonicParsing="false" onAction="#test" text="Button" />
    </children>
 </AnchorPane>
