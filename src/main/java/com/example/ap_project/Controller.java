@@ -70,23 +70,52 @@ public class Controller {
         for ( int i = 0 ; i < rn ; i++){
             move();
         }
-//        //if ladder is encountered
+        //if ladder is encountered
         if(ladder.containsKey(currentPlayer1)){
-            System.out.println("fuckkkk! a ladder");
+            System.out.println("yeeeeee! a ladder");
             pair currposition = getCellcoordinates(currentPlayer1);
             pair ladderends = getCellcoordinates(ladder.get(currentPlayer1));
             translateBtwpoints(currposition,ladderends);
-            currentPlayer1+=ladder.get(currentPlayer1)-currentPlayer1;
+            currentPlayer1=ladder.get(currentPlayer1);
+            updatePlayerDirection();
+        }
+
+        if(snakes.containsKey(currentPlayer1)){
+            System.out.println("fuckkkk! a snake");
+            pair currposition = getCellcoordinates(currentPlayer1);
+            pair snakeends = getCellcoordinates(snakes.get(currentPlayer1));
+            translateBtwpoints(currposition,snakeends);
+            currentPlayer1=snakes.get(currentPlayer1);
+            updatePlayerDirection();
+            System.out.println("Player 1 at "+ currentPlayer1 + "moving " + lr);
         }
         //Player1.setCenterX(this.x += (double)(boxHeight * rn));
 
     }
-
+    public void updatePlayerDirection(){
+        if(currentPlayer1%10 !=0){
+            if((currentPlayer1/10) % 2 ==0 ){
+                lr = true;
+            }
+            else{
+                lr = false;
+            }
+        }
+        else{
+            if((currentPlayer1/10) % 2 ==0 ){
+                lr = false;
+            }
+            else{
+                lr = true;
+            }
+        }
+    }
     private void translateBtwpoints(pair currposition, pair ladderends) {
         Player1.setLayoutX(ladderends.x_cor);
         Player1.setLayoutY(ladderends.y_cor);
         this.x = ladderends.x_cor;
         this.y = ladderends.y_cor;
+        System.out.println("NEw coords = "+this.x+"  "+this.y);
     }
 
     public void findDimensions(){
@@ -136,19 +165,27 @@ public class Controller {
     }
 
     public void populateSnakesAndLadders(){
-        snakes.put(43,17);
-        snakes.put(50,5);
-        snakes.put(56,8);
-        snakes.put(73,15);
-        snakes.put(84,58);
-        snakes.put(98,40);
+        snakes.put(23,5);
+        snakes.put(32,9);
+        snakes.put(46,25);
+        snakes.put(51,11);
+        snakes.put(59,40);
+        snakes.put(66,56);
+        snakes.put(81,62);
+        snakes.put(92,48);
+        snakes.put(95,54);
+        snakes.put(98,65);
 
-        ladder.put(2,23);
-        ladder.put(6,45);
-        ladder.put(20,59);
-        ladder.put(52,72);
-        ladder.put(57,96);
-        ladder.put(71,92);
+        ladder.put(2,21);
+        ladder.put(6,27);
+        ladder.put(8,33);
+        ladder.put(16,34);
+        ladder.put(24,64);
+        ladder.put(38,58);
+        ladder.put(63,82);
+        ladder.put(70,91);
+        ladder.put(73,94);
+        ladder.put(85,97);
 
     }
 
