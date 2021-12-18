@@ -8,12 +8,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
+import org.w3c.dom.events.MouseEvent;
 
 import java.util.HashMap;
 
 public class Controller {
 
-    private double x;
+    private double x;//moves along with player
     private double y;
 
     @FXML
@@ -50,8 +51,11 @@ public class Controller {
     private int[][] cellCoordinates = new int[10][10];
 
     public void roll(ActionEvent e) throws InterruptedException {
-        populateSnakesAndLadders();
-        findDimensions();
+
+        if(currentPlayer1==0) {
+            findDimensions();
+            populateSnakesAndLadders();
+        }
 
         int rn = (int)(Math.random() * 6.0D) + 1;
         Number.setText(String.valueOf(rn));
@@ -67,20 +71,34 @@ public class Controller {
             move();
         }
 //        //if ladder is encountered
-//        if(ladder.containsKey(currentPlayer1)){
-//            System.out.println("fuckkkk! a ladder");
-//            pair currposition = getCellcoordinates(currentPlayer1);
-//            pair ladderends = getCellcoordinates(ladder.get(currentPlayer1));
-//            translateBtwpoints(currposition,ladderends);
-//        }
-//        Player1.setCenterX(this.x += (double)(boxHeight * rn));
+        if(ladder.containsKey(currentPlayer1)){
+            System.out.println("fuckkkk! a ladder");
+            pair currposition = getCellcoordinates(currentPlayer1);
+            pair ladderends = getCellcoordinates(ladder.get(currentPlayer1));
+            translateBtwpoints(currposition,ladderends);
+            currentPlayer1+=ladder.get(currentPlayer1)-currentPlayer1;
+        }
+        //Player1.setCenterX(this.x += (double)(boxHeight * rn));
 
+    }
+
+    private void translateBtwpoints(pair currposition, pair ladderends) {
+        Player1.setLayoutX(ladderends.x_cor);
+        Player1.setLayoutY(ladderends.y_cor);
+        this.x = ladderends.x_cor;
+        this.y = ladderends.y_cor;
     }
 
     public void findDimensions(){
         boardWidth = board.getLayoutBounds().getWidth();
         boardHeight = board.getLayoutBounds().getHeight();
         boxHeight = boardHeight / 10.0;
+
+
+        pair xy = getCellcoordinates(1);
+        System.out.println("CELL CORDINATES =  "+xy.x_cor +" "+ xy.y_cor);
+        x = xy.x_cor;
+        y = xy.y_cor;
 //        System.out.println(boardWidth);
 //        System.out.println(boardHeight);
     }
@@ -91,31 +109,29 @@ public class Controller {
             return;
         }
 
-
-
-        TranslateTransition trans = new TranslateTransition();
-        trans.setNode(Player1);
-        trans.setDuration(Duration.millis(1000));
+//        TranslateTransition trans = new TranslateTransition();
+//        trans.setNode(Player1);
+//        trans.setDuration(Duration.millis(1000));
 
         if ( currentPlayer1 % 10 == 0 ){
-            trans.setToY(this.y-boxHeight);
-            this.y = this.y-boxHeight;
-            //Player1.setCenterY(this.y -= boxHeight);
+//            trans.setToY(this.y-boxHeight);
+//            this.y = this.y-boxHeight;
+            Player1.setLayoutY(this.y -= boxHeight);
             lr = !lr;
         }
         else{
             if (!lr){
-                trans.setToX(this.x-boxHeight);
-                this.x = this.x-boxHeight;
-               // Player1.setCenterX(this.x -= boxHeight);
+//                trans.setToX(this.x-boxHeight);
+//                this.x = this.x-boxHeight;
+                Player1.setLayoutX(this.x -= boxHeight);
             }
             else{
-                trans.setToX(this.x+boxHeight);
-                this.x = this.x+boxHeight;
-                //Player1.setCenterX(this.x += boxHeight);
+//                trans.setToX(this.x+boxHeight);
+//                this.x = this.x+boxHeight;
+                Player1.setLayoutX(this.x += boxHeight);
             }
         }
-        trans.play();
+        //trans.play();
         currentPlayer1++;
     }
 
@@ -136,17 +152,6 @@ public class Controller {
 
     }
 
-    public void test(ActionEvent e){
-        TranslateTransition trans = new TranslateTransition();
-        trans.setNode(Player2);
-        trans.setByX(board.getLayoutX());
-//        System.out.println(board.getLayoutX());
-//        System.out.println(board.getLayoutY());
-        trans.setByY(board.getLayoutY());
-        trans.setDuration(Duration.millis(1000));
-        trans.play();
-    }
-
     public pair getCellcoordinates(int cellNo){ //will give coordinates of a cell, w.r.t pane
         int row,col;
         double boardLayoutX = board.getLayoutX();
@@ -164,7 +169,7 @@ public class Controller {
             else{
                 //right to left
                 row = cellNo/10;
-                col = 10 - cellNo%10;
+                col = 11 - (cellNo%10);
             }
         }
 
@@ -178,7 +183,7 @@ public class Controller {
             else{
                 //right to left
                 row = cellNo/10 -1;
-                col = 0;
+                col = 1;
             }
         }
         double x1 = bottomleftX + (col-1)*boxHeight;
@@ -189,11 +194,6 @@ public class Controller {
 
     }
 
-//    public void translateBtwpoints(pair a,pair b){
-//        Player1.setLayoutX(b.x_cor);
-//        Player1.setLayoutY(b.y_cor);
-//        System.out.println("climbed");
-//    }
 
 
 }
