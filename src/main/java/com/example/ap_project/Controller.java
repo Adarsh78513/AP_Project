@@ -1,14 +1,11 @@
 package com.example.ap_project;
 
-import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
-import javafx.util.Duration;
-import org.w3c.dom.events.MouseEvent;
 
 import java.util.HashMap;
 
@@ -21,7 +18,7 @@ public class Controller {
     private AnchorPane Pane;
 
     @FXML
-    private Circle Player1;
+    private Circle Circle1;
 
     @FXML
     private Circle Player2;
@@ -42,19 +39,33 @@ public class Controller {
 
     private boolean lr = true; //true means right
 
-    private HashMap<Integer, Integer> snakes = new HashMap<>();
-    private HashMap<Integer, Integer> ladder = new HashMap<>();
+
 
     private double cell_1_X;
     private double cell_1_Y;
 
+    checkNull ch;
+    Player player1;
+    Player Player2_;
+    LudoBoard SnakeLadder;
+
     private int[][] cellCoordinates = new int[10][10];
 
+    public void initialize(){
+        System.out.println("Initialising the Controller");
+        ch = new checkNull(board);
+        player1 = new Player(Circle1);
+        SnakeLadder = new LudoBoard(board);
+    }
+
+    //TODO: call roll for the correct player
+
+
     public void roll(ActionEvent e) throws InterruptedException {
+        SnakeLadder.printBoardHeight();
 
         if(currentPlayer1==0) {
             findDimensions();
-            populateSnakesAndLadders();
         }
 
         int rn = (int)(Math.random() * 6.0D) + 1;
@@ -71,21 +82,21 @@ public class Controller {
             move();
         }
         //if ladder is encountered
-        if(ladder.containsKey(currentPlayer1)){
+        if(SnakeLadder.ladder.containsKey(currentPlayer1)){
             System.out.println("yeeeeee! a ladder");
-            pair currposition = getCellcoordinates(currentPlayer1);
-            pair ladderends = getCellcoordinates(ladder.get(currentPlayer1));
+            pair currposition = SnakeLadder.getCellCoordinates(currentPlayer1);
+            pair ladderends = SnakeLadder.getCellCoordinates(SnakeLadder.ladder.get(currentPlayer1));
             translateBtwpoints(currposition,ladderends);
-            currentPlayer1=ladder.get(currentPlayer1);
+            currentPlayer1=SnakeLadder.ladder.get(currentPlayer1);
             updatePlayerDirection();
         }
 
-        if(snakes.containsKey(currentPlayer1)){
+        if(SnakeLadder.snakes.containsKey(currentPlayer1)){
             System.out.println("fuckkkk! a snake");
-            pair currposition = getCellcoordinates(currentPlayer1);
-            pair snakeends = getCellcoordinates(snakes.get(currentPlayer1));
+            pair currposition = SnakeLadder.getCellCoordinates(currentPlayer1);
+            pair snakeends = SnakeLadder.getCellCoordinates(SnakeLadder.snakes.get(currentPlayer1));
             translateBtwpoints(currposition,snakeends);
-            currentPlayer1=snakes.get(currentPlayer1);
+            currentPlayer1=SnakeLadder.snakes.get(currentPlayer1);
             updatePlayerDirection();
             System.out.println("Player 1 at "+ currentPlayer1 + "moving " + lr);
         }
@@ -110,9 +121,10 @@ public class Controller {
             }
         }
     }
+
     private void translateBtwpoints(pair currposition, pair ladderends) {
-        Player1.setLayoutX(ladderends.x_cor);
-        Player1.setLayoutY(ladderends.y_cor);
+        Circle1.setLayoutX(ladderends.x_cor);
+        Circle1.setLayoutY(ladderends.y_cor);
         this.x = ladderends.x_cor;
         this.y = ladderends.y_cor;
         System.out.println("NEw coords = "+this.x+"  "+this.y);
@@ -124,7 +136,7 @@ public class Controller {
         boxHeight = boardHeight / 10.0;
 
 
-        pair xy = getCellcoordinates(1);
+        pair xy = SnakeLadder.getCellCoordinates(1);
         System.out.println("CELL CORDINATES =  "+xy.x_cor +" "+ xy.y_cor);
         x = xy.x_cor;
         y = xy.y_cor;
@@ -145,23 +157,88 @@ public class Controller {
         if ( currentPlayer1 % 10 == 0 ){
 //            trans.setToY(this.y-boxHeight);
 //            this.y = this.y-boxHeight;
-            Player1.setLayoutY(this.y -= boxHeight);
+            Circle1.setLayoutY(this.y -= boxHeight);
             lr = !lr;
         }
         else{
             if (!lr){
 //                trans.setToX(this.x-boxHeight);
 //                this.x = this.x-boxHeight;
-                Player1.setLayoutX(this.x -= boxHeight);
+                Circle1.setLayoutX(this.x -= boxHeight);
             }
             else{
 //                trans.setToX(this.x+boxHeight);
 //                this.x = this.x+boxHeight;
-                Player1.setLayoutX(this.x += boxHeight);
+                Circle1.setLayoutX(this.x += boxHeight);
             }
         }
         //trans.play();
         currentPlayer1++;
+    }
+
+
+
+
+
+
+}
+
+class checkNull{
+    ImageView board;
+
+    checkNull(ImageView board){
+        this.board = board;
+    }
+
+    public void printBoardHeight(){
+        System.out.println("The board height is "+board.getLayoutBounds().getHeight());
+    }
+}
+
+class Player{
+    int currentPosition;
+    double x;
+    double y;
+    Circle circle;
+
+    Player(Circle circle){
+        this.currentPosition = 0;
+        this.x = 0;
+        this.y = 0;
+        this.circle = circle;
+    }
+
+    public void rollDice(){
+        int dice = (int)(Math.random() * 6) + 1;
+        System.out.println("Dice value is "+dice);
+        this.currentPosition += dice;
+        System.out.println("Player position is "+this.currentPosition);
+    }
+
+
+
+}
+
+class LudoBoard{
+    double boardHeight;
+    double boardWidth;
+    double boxHeight;
+    double boxWidth;
+    ImageView board;
+    public HashMap<Integer, Integer> snakes = new HashMap<>();
+    public HashMap<Integer, Integer> ladder = new HashMap<>();
+
+    LudoBoard(ImageView board){
+        this.board = board;
+        boardHeight = this.board.getLayoutBounds().getHeight();
+        boardWidth = this.board.getLayoutBounds().getWidth();
+        boxHeight = boardHeight/10;
+        boxWidth = boardWidth/10;
+        populateSnakesAndLadders();
+    }
+
+    public void printBoardHeight(){
+        System.out.println("The board height is "+boardHeight);
     }
 
     public void populateSnakesAndLadders(){
@@ -189,7 +266,7 @@ public class Controller {
 
     }
 
-    public pair getCellcoordinates(int cellNo){ //will give coordinates of a cell, w.r.t pane
+    public pair getCellCoordinates(int cellNo){ //will give coordinates of a cell, w.r.t pane
         int row,col;
         double boardLayoutX = board.getLayoutX();
         double boardLayoutY = board.getLayoutY();
@@ -230,7 +307,5 @@ public class Controller {
         return  toRet;
 
     }
-
-
 
 }
