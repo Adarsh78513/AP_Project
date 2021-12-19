@@ -26,24 +26,49 @@ public class Controller {
     @FXML
     private Label Number;
 
+    @FXML
+    private ImageView p1_image;
+
+    @FXML
+    private ImageView p2_image;
+
     static Player player1;
-    static Player Player2;
+    static Player player2;
     static LudoBoard SnakeLadder;
     static Dice dice;
 
+    static Player currentPlayer;
+
+    static boolean P1turn;
 
     public void initialize(){
         System.out.println("Initialising the Controller");
         player1 = new Player(Circle1);
+        player2 = new Player(Circle2);
+        currentPlayer = player1;
+        P1turn = true;
         SnakeLadder = new LudoBoard(board);
         dice = new Dice(Number);
+
+        p2_image.setOpacity(0.5);
     }
 
     //TODO: call roll for the correct player
 
 
     public void roll(ActionEvent e) throws InterruptedException {
-        player1.roll();
+        currentPlayer.roll();//OVERLOADING
+        P1turn = ! P1turn;
+        if(P1turn){
+            currentPlayer = player1;
+            p2_image.setOpacity(0.5);
+            p1_image.setOpacity(1);
+        }
+        else{
+            currentPlayer = player2;
+            p1_image.setOpacity(0.5);
+            p2_image.setOpacity(1);
+        }
     }
 }
 
@@ -53,6 +78,7 @@ class Player{
     double y;
     Circle circle;
     private boolean lr; //true means right
+    static int Dice_value;
 
     Player(Circle circle){
         this.currentPosition = 0;
@@ -130,10 +156,17 @@ class Player{
         int rn = (int)(Math.random() * 6.0D) + 1;
         Controller.dice.showDice(rn);
 
-        if(currentPosition+rn>100 || (currentPosition==0 && rn!=6)){
+        Dice_value = rn;
+
+        if(currentPosition+rn>100 || (currentPosition==0 && rn!=6 && rn!=1)){
             return;
         }
         if(currentPosition==0){
+            if(Dice_value==1 || Dice_value==6){
+                pair xy = Controller.SnakeLadder.getCellCoordinates(1);
+                Controller.currentPlayer.circle.setLayoutX(xy.x_cor);
+                Controller.currentPlayer.circle.setLayoutY(xy.y_cor);
+            }
             move();
             return;
         }
@@ -274,10 +307,14 @@ class LudoBoard{
 
         pair xy = getCellCoordinates(1);
         System.out.println("CELL CORDINATES =  "+xy.x_cor +" "+ xy.y_cor);
-        Controller.player1.x = xy.x_cor;
-        Controller.player1.y = xy.y_cor;
+
+
+            Controller.currentPlayer.x = xy.x_cor;
+            Controller.currentPlayer.y = xy.y_cor;
+
 //        System.out.println(boardWidth);
 //        System.out.println(boardHeight);
+
     }
 
 }
