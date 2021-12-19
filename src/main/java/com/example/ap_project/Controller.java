@@ -37,7 +37,7 @@ public class Controller {
     private int currentPlayer1 = 0;
     private int currentPlayer2 = 0;
 
-    private boolean lr = true; //true means right
+//    private boolean lr = true; //true means right
 
 
 
@@ -45,9 +45,10 @@ public class Controller {
     private double cell_1_Y;
 
     checkNull ch;
-    Player player1;
-    Player Player2_;
-    LudoBoard SnakeLadder;
+    static Player player1;
+    static Player Player2_;
+    static LudoBoard SnakeLadder;
+    static Dice dice;
 
     private int[][] cellCoordinates = new int[10][10];
 
@@ -56,125 +57,21 @@ public class Controller {
         ch = new checkNull(board);
         player1 = new Player(Circle1);
         SnakeLadder = new LudoBoard(board);
+        dice = new Dice(Number);
     }
 
     //TODO: call roll for the correct player
 
 
     public void roll(ActionEvent e) throws InterruptedException {
-        SnakeLadder.printBoardHeight();
-
-        if(currentPlayer1==0) {
-            findDimensions();
-        }
-
-        int rn = (int)(Math.random() * 6.0D) + 1;
-        Number.setText(String.valueOf(rn));
-        if(currentPlayer1+rn>100 || (currentPlayer1==0 && rn!=6)){
-            return;
-        }
-        if(currentPlayer1==0){
-            move();
-            return;
-        }
-//        System.out.println(rn);
-        for ( int i = 0 ; i < rn ; i++){
-            move();
-        }
-        //if ladder is encountered
-        if(SnakeLadder.ladder.containsKey(currentPlayer1)){
-            System.out.println("yeeeeee! a ladder");
-            pair currposition = SnakeLadder.getCellCoordinates(currentPlayer1);
-            pair ladderends = SnakeLadder.getCellCoordinates(SnakeLadder.ladder.get(currentPlayer1));
-            translateBtwpoints(currposition,ladderends);
-            currentPlayer1=SnakeLadder.ladder.get(currentPlayer1);
-            updatePlayerDirection();
-        }
-
-        if(SnakeLadder.snakes.containsKey(currentPlayer1)){
-            System.out.println("fuckkkk! a snake");
-            pair currposition = SnakeLadder.getCellCoordinates(currentPlayer1);
-            pair snakeends = SnakeLadder.getCellCoordinates(SnakeLadder.snakes.get(currentPlayer1));
-            translateBtwpoints(currposition,snakeends);
-            currentPlayer1=SnakeLadder.snakes.get(currentPlayer1);
-            updatePlayerDirection();
-            System.out.println("Player 1 at "+ currentPlayer1 + "moving " + lr);
-        }
-        //Player1.setCenterX(this.x += (double)(boxHeight * rn));
-
-    }
-    public void updatePlayerDirection(){
-        if(currentPlayer1%10 !=0){
-            if((currentPlayer1/10) % 2 ==0 ){
-                lr = true;
-            }
-            else{
-                lr = false;
-            }
-        }
-        else{
-            if((currentPlayer1/10) % 2 ==0 ){
-                lr = false;
-            }
-            else{
-                lr = true;
-            }
-        }
+        player1.roll();
     }
 
-    private void translateBtwpoints(pair currposition, pair ladderends) {
-        Circle1.setLayoutX(ladderends.x_cor);
-        Circle1.setLayoutY(ladderends.y_cor);
-        this.x = ladderends.x_cor;
-        this.y = ladderends.y_cor;
-        System.out.println("NEw coords = "+this.x+"  "+this.y);
-    }
-
-    public void findDimensions(){
-        boardWidth = board.getLayoutBounds().getWidth();
-        boardHeight = board.getLayoutBounds().getHeight();
-        boxHeight = boardHeight / 10.0;
 
 
-        pair xy = SnakeLadder.getCellCoordinates(1);
-        System.out.println("CELL CORDINATES =  "+xy.x_cor +" "+ xy.y_cor);
-        x = xy.x_cor;
-        y = xy.y_cor;
-//        System.out.println(boardWidth);
-//        System.out.println(boardHeight);
-    }
 
-    public void move() throws InterruptedException {
-        if(currentPlayer1==0){
-            currentPlayer1++;
-            return;
-        }
 
-//        TranslateTransition trans = new TranslateTransition();
-//        trans.setNode(Player1);
-//        trans.setDuration(Duration.millis(1000));
 
-        if ( currentPlayer1 % 10 == 0 ){
-//            trans.setToY(this.y-boxHeight);
-//            this.y = this.y-boxHeight;
-            Circle1.setLayoutY(this.y -= boxHeight);
-            lr = !lr;
-        }
-        else{
-            if (!lr){
-//                trans.setToX(this.x-boxHeight);
-//                this.x = this.x-boxHeight;
-                Circle1.setLayoutX(this.x -= boxHeight);
-            }
-            else{
-//                trans.setToX(this.x+boxHeight);
-//                this.x = this.x+boxHeight;
-                Circle1.setLayoutX(this.x += boxHeight);
-            }
-        }
-        //trans.play();
-        currentPlayer1++;
-    }
 
 
 
@@ -200,12 +97,14 @@ class Player{
     double x;
     double y;
     Circle circle;
+    private boolean lr; //true means right
 
     Player(Circle circle){
         this.currentPosition = 0;
         this.x = 0;
         this.y = 0;
         this.circle = circle;
+        this.lr = true;
     }
 
     public void rollDice(){
@@ -215,6 +114,110 @@ class Player{
         System.out.println("Player position is "+this.currentPosition);
     }
 
+    public void move() throws InterruptedException {
+        if(currentPosition==0){
+            currentPosition++;
+            return;
+        }
+
+//        TranslateTransition trans = new TranslateTransition();
+//        trans.setNode(Player1);
+//        trans.setDuration(Duration.millis(1000));
+
+        if ( currentPosition % 10 == 0 ){
+//            trans.setToY(this.y-boxHeight);
+//            this.y = this.y-boxHeight;
+            circle.setLayoutY(this.y -= LudoBoard.boxHeight);
+            lr = !lr;
+        }
+        else{
+            if (!lr){
+//                trans.setToX(this.x-boxHeight);
+//                this.x = this.x-boxHeight;
+                circle.setLayoutX(this.x -= LudoBoard.boxHeight);
+            }
+            else{
+//                trans.setToX(this.x+boxHeight);
+//                this.x = this.x+boxHeight;
+                circle.setLayoutX(this.x += LudoBoard.boxHeight);
+            }
+        }
+        //trans.play();
+        currentPosition++;
+    }
+
+    public void updatePlayerDirection(){
+        if(currentPosition%10 !=0){
+            if((currentPosition/10) % 2 ==0 ){
+                lr = true;
+            }
+            else{
+                lr = false;
+            }
+        }
+        else{
+            if((currentPosition/10) % 2 ==0 ){
+                lr = false;
+            }
+            else{
+                lr = true;
+            }
+        }
+    }
+
+    public void roll() throws InterruptedException {
+//        SnakeLadder.printBoardHeight();
+
+        if(currentPosition==0) {
+            Controller.SnakeLadder.findDimensions();
+        }
+
+        int rn = (int)(Math.random() * 6.0D) + 1;
+        Controller.dice.showDice(rn);
+
+        if(currentPosition+rn>100 || (currentPosition==0 && rn!=6)){
+            return;
+        }
+        if(currentPosition==0){
+            move();
+            return;
+        }
+//        System.out.println(rn);
+        for ( int i = 0 ; i < rn ; i++){
+            move();
+        }
+        //if ladder is encountered
+        if(Controller.SnakeLadder.ladder.containsKey(currentPosition)){
+            System.out.println("yeeeeee! a ladder");
+            pair currposition = Controller.SnakeLadder.getCellCoordinates(currentPosition);
+            pair ladderends = Controller.SnakeLadder.getCellCoordinates(Controller.SnakeLadder.ladder.get(currentPosition));
+            translateBtwpoints(currposition,ladderends);
+            currentPosition=Controller.SnakeLadder.ladder.get(currentPosition);
+            updatePlayerDirection();
+        }
+
+        if(Controller.SnakeLadder.snakes.containsKey(currentPosition)){
+            System.out.println("fuckkkk! a snake");
+            pair currposition = Controller.SnakeLadder.getCellCoordinates(currentPosition);
+            pair snakeends = Controller.SnakeLadder.getCellCoordinates(Controller.SnakeLadder.snakes.get(currentPosition));
+            translateBtwpoints(currposition,snakeends);
+            currentPosition=Controller.SnakeLadder.snakes.get(currentPosition);
+            updatePlayerDirection();
+            System.out.println("Player 1 at "+ currentPosition + "moving " + lr);
+        }
+        //Player1.setCenterX(this.x += (double)(boxHeight * rn));
+
+    }
+
+
+    private void translateBtwpoints(pair currposition, pair ladderends) {
+        circle.setLayoutX(ladderends.x_cor);
+        circle.setLayoutY(ladderends.y_cor);
+        this.x = ladderends.x_cor;
+        this.y = ladderends.y_cor;
+        System.out.println("NEw coords = "+this.x+"  "+this.y);
+    }
+
 
 
 }
@@ -222,7 +225,7 @@ class Player{
 class LudoBoard{
     double boardHeight;
     double boardWidth;
-    double boxHeight;
+    static double boxHeight;
     double boxWidth;
     ImageView board;
     public HashMap<Integer, Integer> snakes = new HashMap<>();
@@ -308,4 +311,30 @@ class LudoBoard{
 
     }
 
+    public void findDimensions(){
+        boardWidth = board.getLayoutBounds().getWidth();
+        boardHeight = board.getLayoutBounds().getHeight();
+        boxHeight = boardHeight / 10.0;
+
+
+        pair xy = getCellCoordinates(1);
+        System.out.println("CELL CORDINATES =  "+xy.x_cor +" "+ xy.y_cor);
+        Controller.player1.x = xy.x_cor;
+        Controller.player1.y = xy.y_cor;
+//        System.out.println(boardWidth);
+//        System.out.println(boardHeight);
+    }
+
+}
+
+
+class Dice{
+    Label Number;
+
+    Dice(Label Number){
+        this.Number = Number;
+    }
+    public void showDice(int diceNo){
+        Number.setText(Integer.toString(diceNo));
+    }
 }
