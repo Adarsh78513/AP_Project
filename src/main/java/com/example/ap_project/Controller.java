@@ -11,9 +11,6 @@ import java.util.HashMap;
 
 public class Controller {
 
-    private double x;//moves along with player
-    private double y;
-
     @FXML
     private AnchorPane Pane;
 
@@ -21,7 +18,7 @@ public class Controller {
     private Circle Circle1;
 
     @FXML
-    private Circle Player2;
+    private Circle Circle2;
 
     @FXML
     private ImageView board;
@@ -29,32 +26,14 @@ public class Controller {
     @FXML
     private Label Number;
 
-    private double currentX;
-    private double currentY;
-    private double boardWidth;
-    private double boardHeight;
-    private double boxHeight;
-    private int currentPlayer1 = 0;
-    private int currentPlayer2 = 0;
-
-//    private boolean lr = true; //true means right
-
-
-
-    private double cell_1_X;
-    private double cell_1_Y;
-
-    checkNull ch;
     static Player player1;
-    static Player Player2_;
+    static Player Player2;
     static LudoBoard SnakeLadder;
     static Dice dice;
 
-    private int[][] cellCoordinates = new int[10][10];
 
     public void initialize(){
         System.out.println("Initialising the Controller");
-        ch = new checkNull(board);
         player1 = new Player(Circle1);
         SnakeLadder = new LudoBoard(board);
         dice = new Dice(Number);
@@ -65,30 +44,6 @@ public class Controller {
 
     public void roll(ActionEvent e) throws InterruptedException {
         player1.roll();
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-}
-
-class checkNull{
-    ImageView board;
-
-    checkNull(ImageView board){
-        this.board = board;
-    }
-
-    public void printBoardHeight(){
-        System.out.println("The board height is "+board.getLayoutBounds().getHeight());
     }
 }
 
