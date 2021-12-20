@@ -2,10 +2,14 @@ package com.example.ap_project;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
+import java.io.File;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import java.util.HashMap;
 
@@ -22,6 +26,12 @@ public class Controller {
 
     @FXML
     private ImageView board;
+
+    @FXML
+    private ImageView diceRollImage;
+
+    @FXML
+    private Button Dice;
 
     @FXML
     private Label Number;
@@ -49,6 +59,8 @@ public class Controller {
         P1turn = true;
         SnakeLadder = new LudoBoard(board);
         dice = new Dice(Number);
+        File file = new File("src/main/resources/dice1.png");
+        diceRollImage.setImage(new Image(file.toURI().toString()));
 
         p2_image.setOpacity(0.5);
     }
@@ -57,7 +69,32 @@ public class Controller {
 
 
     public void roll(ActionEvent e) throws InterruptedException {
-        currentPlayer.roll();//OVERLOADING
+        int rn = (int)(Math.random() * 6.0D) + 1;
+
+
+
+        Dice.setDisable(true);
+        Thread thread = new Thread() {
+            public void run() {
+                try {
+                    for (int i = 0; i < 10; i++) {
+                        File file = new File("src/main/resources/dice" + ((int) (Math.random() * 6.0D) + 1) + ".png");
+//                        diceRollImage.setImage(new javafx.scene.image.Image(file.toURI().toString()));
+                        diceRollImage.setImage(new Image(file.toURI().toString()));
+                        Thread.sleep(50);
+                    }
+                    File file = new File("src/main/resources/dice" + rn + ".png");
+                    diceRollImage.setImage(new Image(file.toURI().toString()));
+
+                    Dice.setDisable(false);
+                } catch (Exception e) {
+                    System.out.println("Exception in roll");
+                }
+            }
+        };
+        thread.start();
+
+        currentPlayer.roll(diceRollImage, rn);//OVERLOADING
         P1turn = ! P1turn;
         if(P1turn){
             currentPlayer = player1;
@@ -146,14 +183,14 @@ class Player{
         }
     }
 
-    public void roll() throws InterruptedException {
+    public void roll(ImageView diceRollImage, int rn) throws InterruptedException {
 //        SnakeLadder.printBoardHeight();
 
         if(currentPosition==0) {
             Controller.SnakeLadder.findDimensions();
         }
 
-        int rn = (int)(Math.random() * 6.0D) + 1;
+
         Controller.dice.showDice(rn);
 
         Dice_value = rn;
