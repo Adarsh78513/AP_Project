@@ -47,6 +47,9 @@ public class Controller {
     @FXML
     private ImageView p2_image;
 
+    @FXML
+    private ImageView YellowArrow;
+
     static Player player1;
     static Player player2;
     static LudoBoard SnakeLadder;
@@ -58,6 +61,14 @@ public class Controller {
     MediaPlayer backgroundMusic;
 
     public void initialize(){
+        TranslateTransition transition = new TranslateTransition();
+        transition.setNode(YellowArrow);
+        transition.setDuration(Duration.millis(500));
+        transition.setCycleCount(TranslateTransition.INDEFINITE);
+        transition.setByY(-25);
+        transition.setAutoReverse(true);
+        transition.play();
+
         music();
         System.out.println("Initialising the Controller");
         player1 = new Player(Circle1);
