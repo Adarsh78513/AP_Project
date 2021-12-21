@@ -208,11 +208,11 @@ class Player{
 
         Dice_value = rn;
 
-        if(currentPosition+rn>100 || (currentPosition==0 && rn!=6 && rn!=1)){
+        if(currentPosition+rn>100 || (currentPosition==0 && rn!=1)){
             return;
         }
         if(currentPosition==0){
-            if(Dice_value==1 || Dice_value==6){
+            if(Dice_value==1){
                 TranslateTransition trans = new TranslateTransition();
                 trans.setNode(Controller.currentPlayer.circle);
                 trans.setDuration(Duration.millis(1000));

@@ -16,7 +16,7 @@
       </ImageView>
       <Circle fx:id="Circle1" layoutX="161.0" layoutY="798.0" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
       <Circle fx:id="Circle2" fill="WHITE" layoutX="161.0" layoutY="798.0" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
-      <Button fx:id="BUTTON" layoutX="484.0" layoutY="852.0" mnemonicParsing="false" onAction="#roll" prefHeight="120.0" prefWidth="120.0" text="Dice" />
+      <Button fx:id="BUTTON" layoutX="484.0" layoutY="852.0" mnemonicParsing="false" onAction="#roll" opacity="0.0" prefHeight="120.0" prefWidth="120.0" text="Dice" />
       <ImageView fx:id="p1_image" fitHeight="81.0" fitWidth="183.0" layoutX="320.0" layoutY="868.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../p1.jpg" />
