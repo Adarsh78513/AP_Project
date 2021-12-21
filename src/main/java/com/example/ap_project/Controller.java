@@ -1,5 +1,7 @@
 package com.example.ap_project;
 
+import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -17,6 +19,8 @@ import javafx.util.Duration;
 import java.util.HashMap;
 
 public class Controller {
+    @FXML
+    private Button BUTTON;
 
     @FXML
     private AnchorPane Pane;
@@ -33,8 +37,6 @@ public class Controller {
     @FXML
     private ImageView diceRollImage;
 
-    @FXML
-    private Button Dice;
 
     @FXML
     private Label Number;
@@ -53,10 +55,10 @@ public class Controller {
     static Player currentPlayer;
 
     static boolean P1turn;
-//    MediaPlayer backgroundMusic;
+    MediaPlayer backgroundMusic;
 
     public void initialize(){
-//        music();
+        music();
         System.out.println("Initialising the Controller");
         player1 = new Player(Circle1);
         player2 = new Player(Circle2);
@@ -70,21 +72,21 @@ public class Controller {
         p2_image.setOpacity(0.5);
     }
 
-//    public void music() {
-////        Media media = new Media(new File("src/main/resources/LudoKingMusic.mp3").toURI().toString());
-////        backgroundMusic = new MediaPlayer(media);
-////        backgroundMusic.setVolume(0.1);
-////        backgroundMusic.setAutoPlay(true);
+    public void music() {
 //        Media media = new Media(new File("src/main/resources/LudoKingMusic.mp3").toURI().toString());
 //        backgroundMusic = new MediaPlayer(media);
-//        backgroundMusic.setOnEndOfMedia(new Runnable() {
-//            public void run() {
-//                backgroundMusic.seek(Duration.ZERO);
-//            }
-//            });
-//
-//        backgroundMusic.play();
-//    }
+//        backgroundMusic.setVolume(0.1);
+//        backgroundMusic.setAutoPlay(true);
+        Media media = new Media(new File("src/main/resources/LudoKingMusic.mp3").toURI().toString());
+        backgroundMusic = new MediaPlayer(media);
+        backgroundMusic.setOnEndOfMedia(new Runnable() {
+            public void run() {
+                backgroundMusic.seek(Duration.ZERO);
+            }
+            });
+        backgroundMusic.setVolume(0.07);
+        backgroundMusic.play();
+    }
 
     //TODO: call roll for the correct player
 
@@ -92,9 +94,10 @@ public class Controller {
     public void roll(ActionEvent e) throws InterruptedException {
         int rn = (int)(Math.random() * 6.0D) + 1;
 
+        myth th = new myth(p1_image,p2_image,BUTTON,rn,diceRollImage);
+        th.start();
 
-
-        Dice.setDisable(true);
+        BUTTON.setDisable(true);
         Thread thread = new Thread() {
             public void run() {
                 try {
@@ -107,7 +110,7 @@ public class Controller {
                     File file = new File("src/main/resources/dice" + rn + ".png");
                     diceRollImage.setImage(new Image(file.toURI().toString()));
 
-                    Dice.setDisable(false);
+                    BUTTON.setDisable(false);
                 } catch (Exception e) {
                     System.out.println("Exception in roll");
                 }
@@ -115,18 +118,6 @@ public class Controller {
         };
         thread.start();
 
-        currentPlayer.roll(diceRollImage, rn);//OVERLOADING
-        P1turn = ! P1turn;
-        if(P1turn){
-            currentPlayer = player1;
-            p2_image.setOpacity(0.5);
-            p1_image.setOpacity(1);
-        }
-        else{
-            currentPlayer = player2;
-            p1_image.setOpacity(0.5);
-            p2_image.setOpacity(1);
-        }
     }
 }
 
@@ -159,54 +150,53 @@ class Player{
             return;
         }
 
-//        Thread.sleep(1000);
 
-//        TranslateTransition trans = new TranslateTransition();
-//        trans.setNode(Player1);
-//        trans.setDuration(Duration.millis(1000));
+        TranslateTransition trans = new TranslateTransition();
+        trans.setNode(Controller.currentPlayer.circle);
+        trans.setDuration(Duration.millis(1000));
 
         if ( currentPosition % 10 == 0 ){
-//            trans.setToY(this.y-boxHeight);
-//            this.y = this.y-boxHeight;
-            circle.setLayoutY(this.y -= LudoBoard.boxHeight);
+            trans.setToY(this.y-Controller.SnakeLadder.boxWidth);
+            this.y = this.y-Controller.SnakeLadder.boxWidth;
+            //circle.setLayoutY(this.y -= LudoBoard.boxHeight);
             lr = !lr;
         }
         else{
             if (!lr){
-//                trans.setToX(this.x-boxHeight);
-//                this.x = this.x-boxHeight;
-                circle.setLayoutX(this.x -= LudoBoard.boxHeight);
+                trans.setToX(this.x-Controller.SnakeLadder.boxWidth);
+                this.x = this.x-Controller.SnakeLadder.boxWidth;
+                //circle.setLayoutX(this.x -= LudoBoard.boxHeight);
             }
             else{
-//                trans.setToX(this.x+boxHeight);
-//                this.x = this.x+boxHeight;
-                circle.setLayoutX(this.x += LudoBoard.boxHeight);
+                trans.setToX(this.x+Controller.SnakeLadder.boxWidth);
+                this.x = this.x+Controller.SnakeLadder.boxWidth;
+                //circle.setLayoutX(this.x += LudoBoard.boxHeight);
             }
         }
-        //trans.play();
+        trans.play();
         currentPosition++;
     }
 
     public void updatePlayerDirection(){
-        if(currentPosition%10 !=0){
-            if((currentPosition/10) % 2 ==0 ){
-                lr = true;
+        if(this.currentPosition%10 !=0){
+            if((this.currentPosition/10) % 2 ==0 ){
+                this.lr = true;
             }
             else{
-                lr = false;
+                this.lr = false;
             }
         }
         else{
-            if((currentPosition/10) % 2 ==0 ){
-                lr = false;
+            if((this.currentPosition/10) % 2 ==0 ){
+                this.lr = false;
             }
             else{
-                lr = true;
+                this.lr = true;
             }
         }
     }
 
-    public void roll(ImageView diceRollImage, int rn) throws InterruptedException {
+    public void roll(ImageView diceRollImage, int rn,Button BUTTON) throws InterruptedException {
 //        SnakeLadder.printBoardHeight();
 
         if(currentPosition==0) {
@@ -223,9 +213,15 @@ class Player{
         }
         if(currentPosition==0){
             if(Dice_value==1 || Dice_value==6){
+                TranslateTransition trans = new TranslateTransition();
+                trans.setNode(Controller.currentPlayer.circle);
+                trans.setDuration(Duration.millis(1000));
                 pair xy = Controller.SnakeLadder.getCellCoordinates(1);
-                Controller.currentPlayer.circle.setLayoutX(xy.x_cor);
-                Controller.currentPlayer.circle.setLayoutY(xy.y_cor);
+                trans.setToX(xy.x_cor);
+                trans.setToY(xy.y_cor);
+                trans.play();
+//                Controller.currentPlayer.circle.setLayoutX(xy.x_cor);
+//                Controller.currentPlayer.circle.setLayoutY(xy.y_cor);
             }
 
 //            myth th = new myth();
@@ -234,11 +230,22 @@ class Player{
             return;
         }
 //        System.out.println(rn);
+
+
+        BUTTON.setDisable(true);
         for ( int i = 0 ; i < rn ; i++){
 //            myth th = new myth();
 //            th.start();
             move();
+            try {
+                Thread.sleep(800);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
+
+        BUTTON.setDisable(false);
+
         //if ladder is encountered
         if(Controller.SnakeLadder.ladder.containsKey(currentPosition)){
             System.out.println("yeeeeee! a ladder");
@@ -264,8 +271,15 @@ class Player{
 
 
     private void translateBtwpoints(pair currposition, pair ladderends) {
-        circle.setLayoutX(ladderends.x_cor);
-        circle.setLayoutY(ladderends.y_cor);
+
+        TranslateTransition trans = new TranslateTransition();
+        trans.setNode(circle);
+        trans.setDuration(Duration.millis(1000));
+        trans.setToX(ladderends.x_cor);
+        trans.setToY(ladderends.y_cor);
+        trans.play();
+//        circle.setLayoutX(Controller.SnakeLadder.bottomleftX + ladderends.x_cor);
+//        circle.setLayoutY(Controller.SnakeLadder.bottomleftY - ladderends.y_cor);
         this.x = ladderends.x_cor;
         this.y = ladderends.y_cor;
         System.out.println("NEw coords = "+this.x+"  "+this.y);
@@ -283,6 +297,8 @@ class LudoBoard{
     ImageView board;
     public HashMap<Integer, Integer> snakes = new HashMap<>();
     public HashMap<Integer, Integer> ladder = new HashMap<>();
+    double bottomleftX;
+    double bottomleftY;
 
     LudoBoard(ImageView board){
         this.board = board;
@@ -326,8 +342,9 @@ class LudoBoard{
         int row,col;
         double boardLayoutX = board.getLayoutX();
         double boardLayoutY = board.getLayoutY();
-        double bottomleftX = boardLayoutX + boxHeight/2;
-        double bottomleftY = boardLayoutY + boardHeight - boxHeight/2;
+
+        bottomleftX = boardLayoutX + boxHeight/2;//first cell ke coordinates w.r.t pane
+        bottomleftY = boardLayoutY + boardHeight - boxHeight/2;
 
         if(cellNo % 10 !=0){
             //not last cell
@@ -356,8 +373,8 @@ class LudoBoard{
                 col = 1;
             }
         }
-        double x1 = bottomleftX + (col-1)*boxHeight;
-        double y1 = bottomleftY - row * boxHeight;
+        double x1 = bottomleftX + (col-1)*boxHeight -bottomleftX;
+        double y1 = bottomleftY - row * boxHeight -bottomleftY;
         pair toRet = new pair(x1,y1);
 
         return  toRet;
@@ -374,8 +391,8 @@ class LudoBoard{
         System.out.println("CELL CORDINATES =  "+xy.x_cor +" "+ xy.y_cor);
 
 
-            Controller.currentPlayer.x = xy.x_cor;
-            Controller.currentPlayer.y = xy.y_cor;
+        Controller.currentPlayer.x = xy.x_cor;
+        Controller.currentPlayer.y = xy.y_cor;
 
 //        System.out.println(boardWidth);
 //        System.out.println(boardHeight);
@@ -391,19 +408,70 @@ class Dice{
     Dice(Label Number){
         this.Number = Number;
     }
+
     public void showDice(int diceNo){
-        Number.setText(Integer.toString(diceNo));
+        //Number.setText(String.valueOf(diceNo));
     }
 }
 
-//class myth extends Thread{
-//
-//    @Override
-//    public void run(){
-//        try {
-//            Controller.currentPlayer.move();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//}
+
+class myth extends Thread{
+
+    ImageView p1_image;
+    ImageView p2_image;
+    Button BUTTON;
+    int rn;
+    ImageView diceRollImage;
+    myth(ImageView p1_image,ImageView p2_image,Button BUTTON,int rn,ImageView diceRollImage){
+        this.p1_image = p1_image;
+        this.p2_image = p2_image;
+        this.BUTTON = BUTTON;
+        this.rn = rn;
+        this.diceRollImage = diceRollImage;
+    }
+
+    @Override
+    public void run(){
+        Platform.runLater(new Runnable3());
+        try {
+            Controller.currentPlayer.roll(diceRollImage,rn,BUTTON);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            System.out.println("\n\n\n\n\n\nYAHA HAI ERROR\n\n\n\n\n\n");
+        }
+
+        Platform.runLater(new Runnable2(p1_image,p2_image));
+    }
+}
+
+class Runnable2 implements Runnable{
+    ImageView p1_image;
+    ImageView p2_image;
+
+    Runnable2(ImageView p1_image,ImageView p2_image){
+        this.p1_image = p1_image;
+        this.p2_image = p2_image;
+    }
+    @Override
+    public void run() {
+        Controller.P1turn = ! Controller.P1turn;
+        if(Controller.P1turn){
+            Controller.currentPlayer = Controller.player1;
+            p2_image.setOpacity(0.5);
+            p1_image.setOpacity(1);
+        }
+        else{
+            Controller.currentPlayer = Controller.player2;
+            p1_image.setOpacity(0.5);
+            p2_image.setOpacity(1);
+        }
+    }
+}
+
+class Runnable3 implements Runnable{
+    @Override
+    public void run() {
+        System.out.println(Player.Dice_value);
+        Controller.dice.showDice(Player.Dice_value);
+    }
+}
