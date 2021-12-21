@@ -94,29 +94,29 @@ public class Controller {
     public void roll(ActionEvent e) throws InterruptedException {
         int rn = (int)(Math.random() * 6.0D) + 1;
 
-        myth th = new myth(p1_image,p2_image,BUTTON,rn,diceRollImage);
-        th.start();
+        myth2 th2 = new myth2(p1_image,p2_image,BUTTON,rn,diceRollImage);
+        th2.start();
 
-        BUTTON.setDisable(true);
-        Thread thread = new Thread() {
-            public void run() {
-                try {
-                    for (int i = 0; i < 10; i++) {
-                        File file = new File("src/main/resources/dice" + ((int) (Math.random() * 6.0D) + 1) + ".png");
-//                        diceRollImage.setImage(new javafx.scene.image.Image(file.toURI().toString()));
-                        diceRollImage.setImage(new Image(file.toURI().toString()));
-                        Thread.sleep(50);
-                    }
-                    File file = new File("src/main/resources/dice" + rn + ".png");
-                    diceRollImage.setImage(new Image(file.toURI().toString()));
-
-                    BUTTON.setDisable(false);
-                } catch (Exception e) {
-                    System.out.println("Exception in roll");
-                }
-            }
-        };
-        thread.start();
+//        BUTTON.setDisable(true);
+//        Thread thread = new Thread() {
+//            public void run() {
+//                try {
+//                    for (int i = 0; i < 10; i++) {
+//                        File file = new File("src/main/resources/dice" + ((int) (Math.random() * 6.0D) + 1) + ".png");
+////                        diceRollImage.setImage(new javafx.scene.image.Image(file.toURI().toString()));
+//                        diceRollImage.setImage(new Image(file.toURI().toString()));
+//                        Thread.sleep(50);
+//                    }
+//                    File file = new File("src/main/resources/dice" + rn + ".png");
+//                    diceRollImage.setImage(new Image(file.toURI().toString()));
+//
+//                    BUTTON.setDisable(false);
+//                } catch (Exception e) {
+//                    System.out.println("Exception in roll");
+//                }
+//            }
+//        };
+//        thread.start();
 
     }
 }
@@ -412,6 +412,19 @@ class Dice{
     public void showDice(int diceNo){
         //Number.setText(String.valueOf(diceNo));
     }
+
+    public static void diceRollingAnimation(ImageView diceRollImage){
+        for (int i = 0; i < 10; i++) {
+            File file = new File("src/main/resources/dice" + ((int) (Math.random() * 6.0D) + 1) + ".png");
+            //            diceRollImage.setImage(new javafx.scene.image.Image(file.toURI().toString()));
+            diceRollImage.setImage(new Image(file.toURI().toString()));
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
 
 
@@ -473,5 +486,35 @@ class Runnable3 implements Runnable{
     public void run() {
         System.out.println(Player.Dice_value);
         Controller.dice.showDice(Player.Dice_value);
+    }
+}
+
+class myth2 extends Thread{
+    ImageView p1_image;
+    ImageView p2_image;
+    Button BUTTON;
+    int rn;
+    ImageView diceRollImage;
+
+    myth2(ImageView p1_image,ImageView p2_image,Button BUTTON,int rn,ImageView diceRollImage){
+        this.p1_image = p1_image;
+        this.p2_image = p2_image;
+        this.BUTTON = BUTTON;
+        this.rn = rn;
+        this.diceRollImage = diceRollImage;
+    }
+
+    @Override
+    public void run() {
+        BUTTON.setDisable(true);
+        Dice.diceRollingAnimation(diceRollImage);
+
+        File file = new File("src/main/resources/dice" + rn + ".png");
+        diceRollImage.setImage(new Image(file.toURI().toString()));
+
+        BUTTON.setDisable(false);
+
+        myth th = new myth(p1_image,p2_image,BUTTON,rn,diceRollImage);
+        th.start();
     }
 }
