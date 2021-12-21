@@ -9,8 +9,8 @@
 
 <AnchorPane fx:id="Pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="990.0" prefWidth="1048.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ap_project.Controller">
    <children>
-      <ImageView fx:id="diceRollImage" fitHeight="120.0" fitWidth="120.0" layoutX="484.0" layoutY="849.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="board" fitHeight="807.0" fitWidth="1160.0" layoutX="121.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="48.0" AnchorPane.leftAnchor="121.0" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="33.0">
+      <ImageView fx:id="diceRollImage" fitHeight="120.0" fitWidth="120.0" layoutX="484.0" layoutY="849.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="21.0" AnchorPane.leftAnchor="484.0" AnchorPane.rightAnchor="444.0" AnchorPane.topAnchor="849.0" />
+      <ImageView fx:id="board" fitHeight="807.0" fitWidth="1160.0" layoutX="121.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../BOARD_SL.png" />
          </image>

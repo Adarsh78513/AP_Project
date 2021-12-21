@@ -10,6 +10,9 @@ import javafx.scene.shape.Circle;
 import java.io.File;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 
 import java.util.HashMap;
 
@@ -50,8 +53,10 @@ public class Controller {
     static Player currentPlayer;
 
     static boolean P1turn;
+    MediaPlayer backgroundMusic;
 
     public void initialize(){
+        music();
         System.out.println("Initialising the Controller");
         player1 = new Player(Circle1);
         player2 = new Player(Circle2);
@@ -63,6 +68,22 @@ public class Controller {
         diceRollImage.setImage(new Image(file.toURI().toString()));
 
         p2_image.setOpacity(0.5);
+    }
+
+    public void music() {
+//        Media media = new Media(new File("src/main/resources/LudoKingMusic.mp3").toURI().toString());
+//        backgroundMusic = new MediaPlayer(media);
+//        backgroundMusic.setVolume(0.1);
+//        backgroundMusic.setAutoPlay(true);
+        Media media = new Media(new File("src/main/resources/LudoKingMusic.mp3").toURI().toString());
+        backgroundMusic = new MediaPlayer(media);
+        backgroundMusic.setOnEndOfMedia(new Runnable() {
+            public void run() {
+                backgroundMusic.seek(Duration.ZERO);
+            }
+            });
+
+        backgroundMusic.play();
     }
 
     //TODO: call roll for the correct player
