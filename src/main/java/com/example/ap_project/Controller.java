@@ -26,10 +26,10 @@ public class Controller {
     private AnchorPane Pane;
 
     @FXML
-    private Circle Circle1;
+    private ImageView Circle1;
 
     @FXML
-    private Circle Circle2;
+    private ImageView Circle2;
 
     @FXML
     private ImageView board;
@@ -71,9 +71,10 @@ public class Controller {
 
         music();
         System.out.println("Initialising the Controller");
-        player1 = new Player(Circle1);
-        player2 = new Player(Circle2);
+        player1 = new Player(Circle1,1);
+        player2 = new Player(Circle2,2);
         currentPlayer = player1;
+
         P1turn = true;
         SnakeLadder = new LudoBoard(board);
         dice = new Dice(Number);
@@ -136,16 +137,18 @@ class Player{
     int currentPosition;
     double x;
     double y;
-    Circle circle;
+    ImageView circle;
+    int playerID;
     private boolean lr; //true means right
     static int Dice_value;
 
-    Player(Circle circle){
+    Player(ImageView circle, int ID){
         this.currentPosition = 0;
         this.x = 0;
         this.y = 0;
         this.circle = circle;
         this.lr = true;
+        this.playerID = ID;
     }
 
     public void rollDice(){
@@ -157,6 +160,7 @@ class Player{
 
     public void move() throws InterruptedException {
         if(currentPosition==0){
+
             currentPosition++;
             return;
         }
@@ -227,9 +231,21 @@ class Player{
                 TranslateTransition trans = new TranslateTransition();
                 trans.setNode(Controller.currentPlayer.circle);
                 trans.setDuration(Duration.millis(1000));
-                pair xy = Controller.SnakeLadder.getCellCoordinates(1);
-                trans.setToX(xy.x_cor);
-                trans.setToY(xy.y_cor);
+
+
+                if(Controller.currentPlayer.playerID == 1){
+                    trans.setToX(0.0);
+                    trans.setToY(-80.7);
+                    Controller.currentPlayer.x = 0.0;
+                    Controller.currentPlayer.y = -80.7;
+                }
+                else if(Controller.currentPlayer.playerID == 2){
+                    trans.setToX(-40.35);
+                    trans.setToY(-80.7);
+                    Controller.currentPlayer.x = -40.35;
+                    Controller.currentPlayer.y = -80.7;
+                }
+
                 trans.play();
 //                Controller.currentPlayer.circle.setLayoutX(xy.x_cor);
 //                Controller.currentPlayer.circle.setLayoutY(xy.y_cor);
@@ -384,8 +400,16 @@ class LudoBoard{
                 col = 1;
             }
         }
-        double x1 = bottomleftX + (col-1)*boxHeight -bottomleftX;
-        double y1 = bottomleftY - row * boxHeight -bottomleftY;
+        double x1=0.0,y1=0.0;
+        if(Controller.currentPlayer.playerID == 1) {
+            x1 = bottomleftX + (col - 1) * boxHeight - bottomleftX;
+            y1 = bottomleftY - row * boxHeight - bottomleftY - 80.7;
+        }
+        else if(Controller.currentPlayer.playerID == 2) {
+            x1 = bottomleftX + (col - 1) * boxHeight - bottomleftX - 40.35;
+            y1 = bottomleftY - row * boxHeight - bottomleftY - 80.7;
+        }
+
         pair toRet = new pair(x1,y1);
 
         return  toRet;

@@ -4,32 +4,42 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.shape.Circle?>
 
 <AnchorPane fx:id="Pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="990.0" prefWidth="1048.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ap_project.Controller">
    <children>
-      <ImageView fx:id="diceRollImage" fitHeight="120.0" fitWidth="120.0" layoutX="484.0" layoutY="849.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="21.0" AnchorPane.leftAnchor="484.0" AnchorPane.rightAnchor="444.0" AnchorPane.topAnchor="849.0" />
+      <ImageView fx:id="diceRollImage" fitHeight="119.0" fitWidth="116.0" layoutX="483.0" layoutY="878.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="-1.8249969482421875" AnchorPane.leftAnchor="483.0" AnchorPane.rightAnchor="449.0" AnchorPane.topAnchor="878.0">
+         <image>
+            <Image url="@../../../dice1.png" />
+         </image></ImageView>
       <ImageView fx:id="board" fitHeight="807.0" fitWidth="1160.0" layoutX="121.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../BOARD_SL.png" />
          </image>
       </ImageView>
-      <Circle fx:id="Circle1" layoutX="161.0" layoutY="798.0" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="Circle2" fill="WHITE" layoutX="161.0" layoutY="798.0" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
-      <Button fx:id="BUTTON" layoutX="484.0" layoutY="849.0" mnemonicParsing="false" onAction="#roll" opacity="0.0" prefHeight="120.0" prefWidth="120.0" text="Dice" />
-      <ImageView fx:id="p1_image" fitHeight="81.0" fitWidth="183.0" layoutX="320.0" layoutY="868.0" pickOnBounds="true" preserveRatio="true">
+      <Button fx:id="BUTTON" layoutX="483.0" layoutY="878.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#roll" opacity="0.0" prefHeight="119.0" prefWidth="116.0" text="Dice" />
+      <ImageView fx:id="p1_image" fitHeight="81.0" fitWidth="183.0" layoutX="319.0" layoutY="895.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../p1.jpg" />
          </image>
       </ImageView>
-      <ImageView fx:id="p2_image" fitHeight="81.0" fitWidth="183.0" layoutX="604.0" layoutY="868.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="p2_image" fitHeight="81.0" fitWidth="183.0" layoutX="594.0" layoutY="895.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../p2.jpg" />
          </image>
       </ImageView>
-      <ImageView fx:id="YellowArrow" fitHeight="46.0" fitWidth="50.0" layoutX="526.0" layoutY="798.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="YellowArrow" fitHeight="54.0" fitWidth="38.0" layoutX="520.0" layoutY="826.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../YellowArrow.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="Circle1" fitHeight="80.7" fitWidth="80.7" layoutX="122.0" layoutY="840.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../PL1.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="Circle2" fitHeight="80.7" fitWidth="80.7" layoutX="161.0" layoutY="840.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../PL2.png" />
          </image>
       </ImageView>
    </children>
