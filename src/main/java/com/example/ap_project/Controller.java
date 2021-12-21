@@ -53,10 +53,10 @@ public class Controller {
     static Player currentPlayer;
 
     static boolean P1turn;
-    MediaPlayer backgroundMusic;
+//    MediaPlayer backgroundMusic;
 
     public void initialize(){
-        music();
+//        music();
         System.out.println("Initialising the Controller");
         player1 = new Player(Circle1);
         player2 = new Player(Circle2);
@@ -70,21 +70,21 @@ public class Controller {
         p2_image.setOpacity(0.5);
     }
 
-    public void music() {
+//    public void music() {
+////        Media media = new Media(new File("src/main/resources/LudoKingMusic.mp3").toURI().toString());
+////        backgroundMusic = new MediaPlayer(media);
+////        backgroundMusic.setVolume(0.1);
+////        backgroundMusic.setAutoPlay(true);
 //        Media media = new Media(new File("src/main/resources/LudoKingMusic.mp3").toURI().toString());
 //        backgroundMusic = new MediaPlayer(media);
-//        backgroundMusic.setVolume(0.1);
-//        backgroundMusic.setAutoPlay(true);
-        Media media = new Media(new File("src/main/resources/LudoKingMusic.mp3").toURI().toString());
-        backgroundMusic = new MediaPlayer(media);
-        backgroundMusic.setOnEndOfMedia(new Runnable() {
-            public void run() {
-                backgroundMusic.seek(Duration.ZERO);
-            }
-            });
-
-        backgroundMusic.play();
-    }
+//        backgroundMusic.setOnEndOfMedia(new Runnable() {
+//            public void run() {
+//                backgroundMusic.seek(Duration.ZERO);
+//            }
+//            });
+//
+//        backgroundMusic.play();
+//    }
 
     //TODO: call roll for the correct player
 
@@ -159,6 +159,8 @@ class Player{
             return;
         }
 
+//        Thread.sleep(1000);
+
 //        TranslateTransition trans = new TranslateTransition();
 //        trans.setNode(Player1);
 //        trans.setDuration(Duration.millis(1000));
@@ -225,11 +227,16 @@ class Player{
                 Controller.currentPlayer.circle.setLayoutX(xy.x_cor);
                 Controller.currentPlayer.circle.setLayoutY(xy.y_cor);
             }
+
+//            myth th = new myth();
+//            th.start();
             move();
             return;
         }
 //        System.out.println(rn);
         for ( int i = 0 ; i < rn ; i++){
+//            myth th = new myth();
+//            th.start();
             move();
         }
         //if ladder is encountered
@@ -388,3 +395,15 @@ class Dice{
         Number.setText(Integer.toString(diceNo));
     }
 }
+
+//class myth extends Thread{
+//
+//    @Override
+//    public void run(){
+//        try {
+//            Controller.currentPlayer.move();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//}
