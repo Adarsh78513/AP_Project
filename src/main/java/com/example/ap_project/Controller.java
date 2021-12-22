@@ -104,6 +104,28 @@ public class Controller {
 
 
     public void roll(ActionEvent e) throws InterruptedException {
+
+        if(Controller.player1.shifted==-1){
+            TranslateTransition trans1 = new TranslateTransition();
+            trans1.setNode(Controller.player1.circle);
+            trans1.setDuration(Duration.millis(1000));
+            trans1.setToX(Controller.player1.x + 20);
+            Controller.player1.x += 20;
+            trans1.play();
+            Controller.player1.shifted=0;
+
+        }
+        if(Controller.player2.shifted==1){
+            TranslateTransition trans1 = new TranslateTransition();
+            trans1.setNode(Controller.player2.circle);
+            trans1.setDuration(Duration.millis(1000));
+            trans1.setToX(Controller.player2.x - 20);
+            Controller.player2.x -= 20;
+            trans1.play();
+            Controller.player2.shifted=0;
+
+        }
+
         int rn = (int)(Math.random() * 6.0D) + 1;
 
         myth2 th2 = new myth2(p1_image,p2_image,BUTTON,rn,diceRollImage);
@@ -135,6 +157,7 @@ public class Controller {
 
 class Player{
     int currentPosition;
+    int shifted;
     double x;
     double y;
     ImageView circle;
@@ -149,6 +172,7 @@ class Player{
         this.circle = circle;
         this.lr = true;
         this.playerID = ID;
+        shifted = 0;
     }
 
     public void rollDice(){
@@ -159,6 +183,9 @@ class Player{
     }
 
     public void move() throws InterruptedException {
+
+
+
         if(currentPosition==0){
 
             currentPosition++;
@@ -223,7 +250,7 @@ class Player{
 
         Dice_value = rn;
 
-        if(currentPosition+rn>100 || (currentPosition==0 && rn!=1)){
+        if(currentPosition+rn>100 || (currentPosition==0 && rn!=1 )){
             return;
         }
         if(currentPosition==0){
@@ -254,6 +281,25 @@ class Player{
 //            myth th = new myth();
 //            th.start();
             move();
+            if(Controller.player1.currentPosition == Controller.player2.currentPosition){
+                System.out.println(" SAME CELL PE HAIN");
+                TranslateTransition trans1 = new TranslateTransition();
+                trans1.setNode(Controller.player1.circle);
+                trans1.setDuration(Duration.millis(1000));
+                trans1.setToX(Controller.player1.x - 20);
+                Controller.player1.x -= 20;
+                trans1.play();
+
+                Controller.player1.shifted = -1;
+                Controller.player2.shifted = 1;
+
+                TranslateTransition trans2 = new TranslateTransition();
+                trans2.setNode(Controller.player2.circle);
+                trans2.setDuration(Duration.millis(1000));
+                trans2.setToX(Controller.player2.x + 20);
+                Controller.player2.x += 20;
+                trans2.play();
+            }
             return;
         }
 //        System.out.println(rn);
@@ -271,6 +317,26 @@ class Player{
             }
         }
 
+        if(Controller.player1.currentPosition == Controller.player2.currentPosition){
+            System.out.println(" SAME CELL PE HAIN");
+            TranslateTransition trans1 = new TranslateTransition();
+            trans1.setNode(Controller.player1.circle);
+            trans1.setDuration(Duration.millis(1000));
+            trans1.setToX(Controller.player1.x - 20);
+            Controller.player1.x -= 20;
+            trans1.play();
+
+            Controller.player1.shifted = -1;
+            Controller.player2.shifted = 1;
+
+            TranslateTransition trans2 = new TranslateTransition();
+            trans2.setNode(Controller.player2.circle);
+
+            trans2.setDuration(Duration.millis(1000));
+            trans2.setToX(Controller.player2.x + 20);
+            Controller.player2.x += 20;
+            trans2.play();
+        }
         BUTTON.setDisable(false);
 
         //if ladder is encountered
