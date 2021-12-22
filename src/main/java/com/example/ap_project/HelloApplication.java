@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class HelloApplication extends Application {
+    static Stage s;
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
@@ -23,6 +24,7 @@ public class HelloApplication extends Application {
         String css = this.getClass().getResource("styling.css").toExternalForm();
         scene.getStylesheets().add(css);
         stage.show();
+        s=stage;
 
 //        scene.setOnMouseClicked(new EventHandler<MouseEvent>() {
 //            @Override
@@ -31,6 +33,10 @@ public class HelloApplication extends Application {
 //                System.out.println("Y   =  "+event.getSceneY());
 //            }
 //        });
+    }
+
+    public static void closeStage(){
+        s.close();
     }
 
     public static void main(String[] args) {

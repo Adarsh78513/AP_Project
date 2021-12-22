@@ -4,24 +4,35 @@ import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.shape.Circle;
+
 import java.io.File;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class Controller {
     @FXML
     private Button BUTTON;
 
+    @FXML
+    private Button SWITCH;
+    static Button Switchbutton;
     @FXML
     private AnchorPane Pane;
 
@@ -50,6 +61,11 @@ public class Controller {
     @FXML
     private ImageView YellowArrow;
 
+    @FXML
+    private javafx.scene.layout.Pane winnerpane;
+
+    static javafx.scene.layout.Pane wp;
+
     static Player player1;
     static Player player2;
     static LudoBoard SnakeLadder;
@@ -60,6 +76,22 @@ public class Controller {
     static boolean P1turn;
     MediaPlayer backgroundMusic;
 
+
+
+//    private Stage stage;
+//    private Scene scene;
+//    private Parent parent;
+//    public void switchToWinnerScene(ActionEvent e) throws IOException {
+////        parent = FXMLLoader.load(Objects.requireNonNull(Controller.class.getResource("tataScene.fxml")));
+////        stage = (Stage)((Node)e.getSource()).getScene().getWindow();
+////        scene = new Scene(parent);
+////        stage.setScene(scene);
+////        stage.show();
+////
+//        winnerpane.setOpacity(1);
+//
+//    }
+
     public void initialize(){
         TranslateTransition transition = new TranslateTransition();
         transition.setNode(YellowArrow);
@@ -68,7 +100,8 @@ public class Controller {
         transition.setByY(-25);
         transition.setAutoReverse(true);
         transition.play();
-
+        Switchbutton = SWITCH;
+        wp = winnerpane;
         music();
         System.out.println("Initialising the Controller");
         player1 = new Player(Circle1,1);
@@ -102,9 +135,13 @@ public class Controller {
 
     //TODO: call roll for the correct player
 
+    public void exitGame(ActionEvent e){
+        HelloApplication.closeStage();
 
+    }
     public void roll(ActionEvent e) throws InterruptedException {
 
+        //If any player is shifted
         if(Controller.player1.shifted==-1){
             TranslateTransition trans1 = new TranslateTransition();
             trans1.setNode(Controller.player1.circle);
@@ -128,29 +165,8 @@ public class Controller {
 
         int rn = (int)(Math.random() * 6.0D) + 1;
 
-        myth2 th2 = new myth2(p1_image,p2_image,BUTTON,rn,diceRollImage);
+        myth2 th2 = new myth2(p1_image,p2_image,BUTTON,rn,diceRollImage,SWITCH);
         th2.start();
-
-//        BUTTON.setDisable(true);
-//        Thread thread = new Thread() {
-//            public void run() {
-//                try {
-//                    for (int i = 0; i < 10; i++) {
-//                        File file = new File("src/main/resources/dice" + ((int) (Math.random() * 6.0D) + 1) + ".png");
-////                        diceRollImage.setImage(new javafx.scene.image.Image(file.toURI().toString()));
-//                        diceRollImage.setImage(new Image(file.toURI().toString()));
-//                        Thread.sleep(50);
-//                    }
-//                    File file = new File("src/main/resources/dice" + rn + ".png");
-//                    diceRollImage.setImage(new Image(file.toURI().toString()));
-//
-//                    BUTTON.setDisable(false);
-//                } catch (Exception e) {
-//                    System.out.println("Exception in roll");
-//                }
-//            }
-//        };
-//        thread.start();
 
     }
 }
@@ -177,9 +193,7 @@ class Player{
 
     public void rollDice(){
         int dice = (int)(Math.random() * 6) + 1;
-        System.out.println("Dice value is "+dice);
         this.currentPosition += dice;
-        System.out.println("Player position is "+this.currentPosition);
     }
 
     public void move() throws InterruptedException {
@@ -189,13 +203,14 @@ class Player{
         if(currentPosition==0){
 
             currentPosition++;
+
             return;
         }
 
 
         TranslateTransition trans = new TranslateTransition();
         trans.setNode(Controller.currentPlayer.circle);
-        trans.setDuration(Duration.millis(1000));
+        trans.setDuration(Duration.millis(100));
 
         if ( currentPosition % 10 == 0 ){
             trans.setToY(this.y-Controller.SnakeLadder.boxWidth);
@@ -217,6 +232,9 @@ class Player{
         }
         trans.play();
         currentPosition++;
+
+
+
     }
 
     public void updatePlayerDirection(){
@@ -236,15 +254,17 @@ class Player{
                 this.lr = true;
             }
         }
+
+
     }
 
-    public void roll(ImageView diceRollImage, int rn,Button BUTTON) throws InterruptedException {
+    public void roll(ImageView diceRollImage, int rn, Button BUTTON, Button SWITCH) throws InterruptedException {
 //        SnakeLadder.printBoardHeight();
 
         if(currentPosition==0) {
+
             Controller.SnakeLadder.findDimensions();
         }
-
 
         Controller.dice.showDice(rn);
 
@@ -281,8 +301,9 @@ class Player{
 //            myth th = new myth();
 //            th.start();
             move();
+
             if(Controller.player1.currentPosition == Controller.player2.currentPosition){
-                System.out.println(" SAME CELL PE HAIN");
+
                 TranslateTransition trans1 = new TranslateTransition();
                 trans1.setNode(Controller.player1.circle);
                 trans1.setDuration(Duration.millis(1000));
@@ -302,7 +323,7 @@ class Player{
             }
             return;
         }
-//        System.out.println(rn);
+
 
 
         BUTTON.setDisable(true);
@@ -317,8 +338,23 @@ class Player{
             }
         }
 
+        if(Controller.currentPlayer.currentPosition == 100){
+
+
+
+            Text winnerPlayer =(Text) Controller.wp.getChildren().get(0);
+            winnerPlayer.setText("Player "+Controller.currentPlayer.playerID+" is Winner");
+
+            ImageView winner = (ImageView)Controller.wp.getChildren().get(3);
+            File file = new File("src/main/resources/PL" + Controller.currentPlayer.playerID + ".png");
+            winner.setImage(new Image(file.toURI().toString()));
+            Controller.wp.setOpacity(1);
+            return;
+        }
+
+
         if(Controller.player1.currentPosition == Controller.player2.currentPosition){
-            System.out.println(" SAME CELL PE HAIN");
+
             TranslateTransition trans1 = new TranslateTransition();
             trans1.setNode(Controller.player1.circle);
             trans1.setDuration(Duration.millis(1000));
@@ -337,11 +373,11 @@ class Player{
             Controller.player2.x += 20;
             trans2.play();
         }
-        BUTTON.setDisable(false);
+
 
         //if ladder is encountered
         if(Controller.SnakeLadder.ladder.containsKey(currentPosition)){
-            System.out.println("yeeeeee! a ladder");
+
             pair currposition = Controller.SnakeLadder.getCellCoordinates(currentPosition);
             pair ladderends = Controller.SnakeLadder.getCellCoordinates(Controller.SnakeLadder.ladder.get(currentPosition));
             translateBtwpoints(currposition,ladderends);
@@ -350,14 +386,34 @@ class Player{
         }
 
         if(Controller.SnakeLadder.snakes.containsKey(currentPosition)){
-            System.out.println("fuckkkk! a snake");
+
             pair currposition = Controller.SnakeLadder.getCellCoordinates(currentPosition);
             pair snakeends = Controller.SnakeLadder.getCellCoordinates(Controller.SnakeLadder.snakes.get(currentPosition));
             translateBtwpoints(currposition,snakeends);
             currentPosition=Controller.SnakeLadder.snakes.get(currentPosition);
             updatePlayerDirection();
-            System.out.println("Player 1 at "+ currentPosition + "moving " + lr);
         }
+        if(Controller.player1.currentPosition == Controller.player2.currentPosition){
+
+            TranslateTransition trans1 = new TranslateTransition();
+            trans1.setNode(Controller.player1.circle);
+            trans1.setDuration(Duration.millis(1000));
+            trans1.setToX(Controller.player1.x - 20);
+            Controller.player1.x -= 20;
+            trans1.play();
+
+            Controller.player1.shifted = -1;
+            Controller.player2.shifted = 1;
+
+            TranslateTransition trans2 = new TranslateTransition();
+            trans2.setNode(Controller.player2.circle);
+            trans2.setDuration(Duration.millis(1000));
+            trans2.setToX(Controller.player2.x + 20);
+            Controller.player2.x += 20;
+            trans2.play();
+        }
+
+        BUTTON.setDisable(false);
         //Player1.setCenterX(this.x += (double)(boxHeight * rn));
 
     }
@@ -375,7 +431,7 @@ class Player{
 //        circle.setLayoutY(Controller.SnakeLadder.bottomleftY - ladderends.y_cor);
         this.x = ladderends.x_cor;
         this.y = ladderends.y_cor;
-        System.out.println("NEw coords = "+this.x+"  "+this.y);
+
     }
 
 
@@ -402,9 +458,6 @@ class LudoBoard{
         populateSnakesAndLadders();
     }
 
-    public void printBoardHeight(){
-        System.out.println("The board height is "+boardHeight);
-    }
 
     public void populateSnakesAndLadders(){
         snakes.put(23,5);
@@ -489,14 +542,12 @@ class LudoBoard{
 
 
         pair xy = getCellCoordinates(1);
-        System.out.println("CELL CORDINATES =  "+xy.x_cor +" "+ xy.y_cor);
+
 
 
         Controller.currentPlayer.x = xy.x_cor;
         Controller.currentPlayer.y = xy.y_cor;
 
-//        System.out.println(boardWidth);
-//        System.out.println(boardHeight);
 
     }
 
@@ -536,22 +587,23 @@ class myth extends Thread{
     Button BUTTON;
     int rn;
     ImageView diceRollImage;
-    myth(ImageView p1_image,ImageView p2_image,Button BUTTON,int rn,ImageView diceRollImage){
+    Button SWITCH;
+    myth(ImageView p1_image,ImageView p2_image,Button BUTTON,int rn,ImageView diceRollImage,Button SWITCH){
         this.p1_image = p1_image;
         this.p2_image = p2_image;
         this.BUTTON = BUTTON;
         this.rn = rn;
         this.diceRollImage = diceRollImage;
+        this.SWITCH = SWITCH;
     }
 
     @Override
     public void run(){
         Platform.runLater(new Runnable3());
         try {
-            Controller.currentPlayer.roll(diceRollImage,rn,BUTTON);
+            Controller.currentPlayer.roll(diceRollImage,rn,BUTTON,SWITCH);
         } catch (InterruptedException e) {
             e.printStackTrace();
-            System.out.println("\n\n\n\n\n\nYAHA HAI ERROR\n\n\n\n\n\n");
         }
 
         Platform.runLater(new Runnable2(p1_image,p2_image));
@@ -585,7 +637,6 @@ class Runnable2 implements Runnable{
 class Runnable3 implements Runnable{
     @Override
     public void run() {
-        System.out.println(Player.Dice_value);
         Controller.dice.showDice(Player.Dice_value);
     }
 }
@@ -596,13 +647,14 @@ class myth2 extends Thread{
     Button BUTTON;
     int rn;
     ImageView diceRollImage;
-
-    myth2(ImageView p1_image,ImageView p2_image,Button BUTTON,int rn,ImageView diceRollImage){
+    Button SWITCH;
+    myth2(ImageView p1_image,ImageView p2_image,Button BUTTON,int rn,ImageView diceRollImage,Button SWITCH){
         this.p1_image = p1_image;
         this.p2_image = p2_image;
         this.BUTTON = BUTTON;
         this.rn = rn;
         this.diceRollImage = diceRollImage;
+        this.SWITCH = SWITCH;
     }
 
     @Override
@@ -615,7 +667,7 @@ class myth2 extends Thread{
 
         BUTTON.setDisable(false);
 
-        myth th = new myth(p1_image,p2_image,BUTTON,rn,diceRollImage);
+        myth th = new myth(p1_image,p2_image,BUTTON,rn,diceRollImage,SWITCH);
         th.start();
     }
 }

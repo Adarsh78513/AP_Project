@@ -4,6 +4,9 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane fx:id="Pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="990.0" prefWidth="1048.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ap_project.Controller">
    <children>
@@ -42,5 +45,21 @@
             <Image url="@../../../PL2.png" />
          </image>
       </ImageView>
+      <Pane fx:id="winnerpane" layoutX="358.0" layoutY="481.0" opacity="0.0" prefHeight="352.0" prefWidth="363.0">
+         <children>
+            <Text fx:id="winner" fill="WHITE" layoutY="138.0" opacity="0.98" strokeLineCap="BUTT" strokeType="OUTSIDE" strokeWidth="5.0" text="PLAYER 2 HAS WON" textAlignment="CENTER" wrappingWidth="369.0">
+               <font>
+                  <Font name="Dubai Medium" size="36.0" />
+               </font>
+            </Text>
+            <Text fx:id="winner1" fill="WHITE" layoutY="183.0" strokeLineCap="BUTT" strokeType="OUTSIDE" strokeWidth="5.0" text="CONGRATULATIONS!" textAlignment="CENTER" wrappingWidth="369.0">
+               <font>
+                  <Font name="Dubai Medium" size="36.0" />
+               </font>
+            </Text>
+            <Button layoutX="148.0" layoutY="313.0" mnemonicParsing="false" onAction="#exitGame" style="-fx-background-color: #53bc51;" text="Exit Game!" />
+            <ImageView fitHeight="119.0" fitWidth="124.0" layoutX="127.0" layoutY="187.0" pickOnBounds="true" preserveRatio="true" />
+         </children>
+      </Pane>
    </children>
 </AnchorPane>

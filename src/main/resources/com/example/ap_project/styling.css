@@ -1,3 +1,6 @@
 #Pane{
     -fx-background-image : url("Background.jpg");
 }
+#winnerpane{
+    -fx-background-image : url("gameendbg.jpg");;
+}
